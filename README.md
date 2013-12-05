@@ -1,7 +1,7 @@
-DSG Calendar
+DSG Blocks
 =============
 
-An interactive calendar application built on Node.js
+An application built for managing the blcoks pages deals on Node.js
 
 Technology
 ------------
@@ -30,7 +30,7 @@ Installation
 ------------
 
 ```bash
-$ git clone git@github.com:adickson311/dsg-calendar.git && cd ./dsg-calendar
+$ git clone git@github.com:adickson311/dsg-blocks.git && cd ./dsg-blocks
 $ npm install
 $ mv ./config.example.js ./config.js #set mongodb and email credentials
 $ grunt
@@ -44,7 +44,7 @@ You need a few records in the database to start using the user system.
 Run these commands on mongo. __Obviously you should use your email address.__
 
 ```js
-use dsg-calendar;
+use dsg-blocks;
 db.admingroups.insert({ _id: 'root', name: 'Root' });
 db.admins.insert({ name: {first: 'Root', last: 'Admin', full: 'Root Admin'}, groups: ['root'] });
 var rootAdmin = db.admins.findOne();
