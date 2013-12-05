@@ -1,0 +1,54 @@
+extends ../../layouts/default
+
+block head
+  title Blocks Page
+
+block neck
+  link(rel='stylesheet', href='/views/pages/index.min.css?#{cacheBreaker}')
+
+block feet
+  //script(src='/vendor/require/require.js' data-main="vendor/dsg/main")
+  script(src='/views/pages/index.js')
+
+block body
+  div.blocks-form-container
+    div#header
+    div#results-table
+  
+  script(type='text/template', id='tmpl-header')
+    div.page-header
+      -if (user)
+        form.form-inline.pull-right
+          div.input-group
+            input.form-control(name='name', type='text', placeholder='enter a name', value!='<%- name.full %>')
+            input.form-control(name='name', type='hidden', value!='<%- _id %>')
+            button.btn.btn-primary.btn-add(type='button') Add New
+      h1 <%- data %>
+  
+  script(type='text/template', id='tmpl-results-table')
+    table.table.table-striped
+      thead
+        tr
+          -if (user)
+            th
+          th name
+          th id
+
+      tbody#results-rows
+  
+  script(type='text/template', id='tmpl-results-row')
+    -if (user)
+      td
+        input.btn.btn-default.btn-sm.btn-details(type='button', value='Edit')
+    td.stretch
+      <%- name %>
+    td.nowrap
+      div <%- _id %>
+  
+  script(type='text/template', id='tmpl-results-empty-row')
+    tr
+      td(colspan='4') no documents matched
+  
+  script(type='text/template', id='data-record') !{data.record}
+
+  script(type='text/template', id='data-deals') !{data.deals}

@@ -1,0 +1,22 @@
+extends ../../layouts/default
+
+block head
+  title Blocks Page
+
+block neck
+  link(rel='stylesheet', href='/views/deals/index.min.css?#{cacheBreaker}')
+
+block feet
+  //script(src='/vendor/require/require.js' data-main="vendor/dsg/main")
+  script(src='/views/deals/index.js')
+
+block body
+  div.blocks-form-container
+    div#header
+    div#results-table
+  
+  script(type='text/template', id='tmpl-header')
+    div.page-header
+      h1 <%- name %>
+  
+  script(type='text/template', id='data-record') !{data.record}
