@@ -79,12 +79,12 @@ block body
         div.col-sm-6
           div.control-group(class!='<%= errfor.startDate ? "has-error" : "" %>')
             label.control-label Start Date:
-            input.form-control(type='text', name='startDate', value!='<%= startDate %>')
+            input.form-control(type='date', name='startDate', value!='<%= startDate %>')
             span.help-block <%= errfor.startDate %>
         div.col-sm-6
           div.control-group(class!='<%= errfor.endDate ? "has-error" : "" %>')
             label.control-label End Date:
-            input.form-control(type='text', name='endDate', value!='<%= endDate %>')
+            input.form-control(type='date', name='endDate', value!='<%= endDate %>')
             span.help-block <%= errfor.endDate %>
       div.row
         div.col-sm-2

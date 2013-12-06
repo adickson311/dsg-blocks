@@ -101,3 +101,12 @@ exports.create = function(req, res, next){
   
   workflow.emit('validate');
 };
+
+exports.deals = function(req, res, next){
+  req.app.db.models.Deal.find({'page.id': req.params.id}).exec(function(err, results) {
+    if (err) {
+      return next(err);
+    }
+    res.json(results);
+  });
+};

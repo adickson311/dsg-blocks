@@ -83,9 +83,21 @@
         isActive: app.mainView.model.get('isActive'),
         name: app.mainView.model.get('name'),
         page:{
-          name: app.mainView.model.get('page.name'),
-          id: app.mainView.model.get('page.id')
-        }
+          name: app.mainView.model.get('page').name,
+          id: app.mainView.model.get('page').id
+        },
+        dealID: app.mainView.model.get('dealID'),
+        available: app.mainView.model.get('available'),
+        inStoreOnly: app.mainView.model.get('inStoreOnly'),
+        online: app.mainView.model.get('online'),
+        startDate: app.mainView.model.get('startDate'),
+        endDate: app.mainView.model.get('endDate'),
+        headline: app.mainView.model.get('headline'),
+        disclaimer:  app.mainView.model.get('disclaimer'),
+        redPrice:  app.mainView.model.get('redPrice'),
+        lPrice1:  app.mainView.model.get('lPrice1'),
+        lPrice2:  app.mainView.model.get('lPrice2'),
+        link: app.mainView.model.get('link')
       });
     },
     render: function() {
@@ -102,18 +114,17 @@
         isActive: this.$el.find('[name="isActive"]').val(),
         name: this.$el.find('[name="name"]').val(),
         dealID: this.$el.find('[name="dealID"]').val(),
-	      //pageID: '', May need this as a hidden element if it gets re-written
-    	  available: this.$el.find('[name="available"]').val(),
-      	inStoreOnly: this.$el.find('[name="inStoreOnly"]').val(),
-	      online: this.$el.find('[name="online"]').val(),
-  	    startDate: this.$el.find('[name="startDate"]').val(),
-    	  endDate: this.$el.find('[name="endDate"]').val(),
-	      headline: this.$el.find('[name="headline"]').val(),
-  	    disclaimer: this.$el.find('[name="disclaimer"]').val(),
-    	  redPrice: this.$el.find('[name="redPrice"]').val(),
-	      lPrice1: this.$el.find('[name="lPrice1"]').val(),
-	      lPrice2: this.$el.find('[name="lPrice2"]').val(),
-  	    link: this.$el.find('[name="link"]').val()  
+        available: this.$el.find('[name="available"]').val(),
+        inStoreOnly: this.$el.find('[name="inStoreOnly"]').val(),
+        online: this.$el.find('[name="online"]').val(),
+        startDate: this.$el.find('[name="startDate"]').val(),
+        endDate: this.$el.find('[name="endDate"]').val(),
+        headline: this.$el.find('[name="headline"]').val(),
+        disclaimer: this.$el.find('[name="disclaimer"]').val(),
+        redPrice: this.$el.find('[name="redPrice"]').val(),
+        lPrice1: this.$el.find('[name="lPrice1"]').val(),
+        lPrice2: this.$el.find('[name="lPrice2"]').val(),
+        link: this.$el.find('[name="link"]').val()  
       });
     }
   });
@@ -125,7 +136,7 @@
       this.model = new app.Deal( JSON.parse( unescape($('#data-record').html())) );  
       app.headerView = new app.HeaderView();
       app.detailsView = new app.DetailsView();
-		}
+    }
   });
   
   $(document).ready(function() {
