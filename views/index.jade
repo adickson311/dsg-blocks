@@ -26,7 +26,7 @@ block body
         form.form-inline.pull-right
           div.input-group
             input.form-control(name='name', type='text', placeholder='enter a name', value!='<%- name.full %>')
-            button.btn.btn-primary.btn-add(type='button') Add New
+            button.btn.btn-primary.btn-add(type='button') Create Page
       h1 Blocks Pages
   
   script(type='text/template', id='tmpl-filters')
@@ -56,21 +56,17 @@ block body
     table.table.table-striped
       thead
         tr
+          th Pages
           -if (user)
-            th
-          th name
-          th id
-
+            th.col-sm-1
       tbody#results-rows
   
   script(type='text/template', id='tmpl-results-row')
+    td.stretch
+      a(href!='/pages/<%- _id %>/') <%- name %>
     -if (user)
       td
         input.btn.btn-default.btn-sm.btn-details(type='button', value='Edit')
-    td.stretch
-      a(href!='/pages/<%- _id %>/') <%- data %>
-    td.nowrap
-      div <%- _id %>
   
   script(type='text/template', id='tmpl-results-empty-row')
     tr

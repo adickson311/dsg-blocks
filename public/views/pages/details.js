@@ -10,7 +10,7 @@
     defaults: {
       errors: [],
       errfor: {},
-      data: ''
+      name: ''
     },
     url: function() {
       return '/pages/'+ (this.isNew() ? '' : this.id +'/');
@@ -23,7 +23,10 @@
       errors: [],
       errfor: {},
       name: '',
-      pageID: ''
+      page: {
+        id: '',
+        name: ''
+      }
     },
     url: function() {
       return '/deals/'+ (this.isNew() ? '' : this.id +'/');
@@ -89,7 +92,10 @@
       else {
         this.model.save({
           name: this.$el.find('[name="name"]').val(),
-          pageID: this.$el.find('[type="hidden"]').val()
+          page: {
+            id: this.$el.find('[name="pageID"]').val(),
+            name: this.$el.find('[name="pageName"]').val()
+          }
         },{
           success: function(model, response) {
             if (response.success) {

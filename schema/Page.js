@@ -2,7 +2,7 @@
 
 exports = module.exports = function(app, mongoose) {
   var pageSchema = new mongoose.Schema({
-    data: { type: String, default: '' },
+    name: { type: String, default: '' },
     userCreated: {
       id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
       name: { type: String, default: '' },
