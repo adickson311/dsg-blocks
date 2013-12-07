@@ -7,3 +7,6 @@ node_modules/*
 *.min.css
 /config.js
 .nodemonignore
+grunt
+grunt.cmd
+npm.cmd
