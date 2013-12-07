@@ -8,15 +8,138 @@ block neck
 
 block feet
   //script(src='/vendor/require/require.js' data-main="vendor/dsg/main")
-  script(src='/views/deals/index.js')
+  script(src='/views/deals/details.js')
 
 block body
   div.blocks-form-container
     div#header
-    div#results-table
+    div#details
   
   script(type='text/template', id='tmpl-header')
     div.page-header
+      nav.breadcrumbs
+        a(href='/') Pages
+        span.divider >
+        a(href!='/pages/<%- page.id %>/') <%- page.name %>
+        span.divider >
+        <%- name %>
       h1 <%- name %>
   
+  script(type='text/template', id='tmpl-details-readonly')
+    p <%= dealID %>
+    p <%= available %>
+    p <%= iso %>
+    p <%= online %>
+    p <%= startDate %>
+    p <%= endDate %>
+    p <%= headline %>
+    p <%= disclaimer %>
+    p <%= redPrice %>
+    p <%= lPrice1 %>
+    p <%= lPrice2 %>
+    p <%= link %>
+  
+  script(type='text/template', id='tmpl-details-form')
+    fieldset
+      legend Deal Details
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-danger.alert-dismissable
+          button.close(type='button', data-dismiss='alert') &times;
+          |<%= err %>
+        |<% }); %>
+        |<% if (success) { %>
+        div.alert.alert-info.alert-dismissable
+          button.close(type='button', data-dismiss='alert') &times;
+          | Changes have been saved.
+        |<% } %>
+      div.row
+        div.col-sm-6
+          div.control-group(class!='<%= errfor.name ? "has-error" : "" %>')
+            label.control-label Name:
+            input.form-control(type='text', name='name', value!='<%= name %>')
+            span.help-block <%= errfor.name %>
+        div.col-sm-6
+          div.control-group(class!='<%= errfor.dealID ? "has-error" : "" %>')
+            label.control-label Deal ID:
+            input.form-control(type='text', name='dealID', value!='<%= dealID %>')
+            span.help-block <%= errfor.dealID %>
+      div.row
+        div.col-sm-6
+          div.control-group(class!='<%= errfor.headline ? "has-error" : "" %>')
+            label.control-label Headline:
+            input.form-control(type='text', name='headline', value!='<%= headline %>')
+            span.help-block <%= errfor.headline %>
+        div.col-sm-6
+          div.control-group(class!='<%= errfor.disclaimer ? "has-error" : "" %>')
+            label.control-label Disclaimer:
+            input.form-control(type='text', name='disclaimer', value!='<%= disclaimer %>')
+            span.help-block <%= errfor.disclaimer %>
+      div.row
+        div.col-sm-6
+          div.control-group(class!='<%= errfor.startDate ? "has-error" : "" %>')
+            label.control-label Start Date:
+            input.form-control(type='date', name='startDate', value!='<%= startDate %>')
+            span.help-block <%= errfor.startDate %>
+        div.col-sm-6
+          div.control-group(class!='<%= errfor.endDate ? "has-error" : "" %>')
+            label.control-label End Date:
+            input.form-control(type='date', name='endDate', value!='<%= endDate %>')
+            span.help-block <%= errfor.endDate %>
+      div.row
+        div.col-sm-2
+          div.control-group(class!='<%= errfor.redPrice ? "has-error" : "" %>')
+            label.control-label Red Price:
+            input.form-control(type='text', name='redPrice', value!='<%= redPrice %>')
+            span.help-block <%= errfor.redPrice %>
+        div.col-sm-2
+          div.control-group(class!='<%= errfor.lPrice1 ? "has-error" : "" %>')
+            label.control-label Lowered Price 1:
+            input.form-control(type='text', name='lPrice1', value!='<%= lPrice1 %>')
+            span.help-block <%= errfor.lPrice1 %>
+        div.col-sm-2
+          div.control-group(class!='<%= errfor.lPrice2 ? "has-error" : "" %>')
+            label.control-label Lowered Price 2:
+            input.form-control(type='text', name='lPrice2', value!='<%= lPrice2 %>')
+          span.help-block <%= errfor.lPrice2 %>
+      div.row
+        div.col-sm-12
+          div.control-group(class!='<%= errfor.link ? "has-error" : "" %>')
+            label.control-label Link:
+            input.form-control(type='text', name='link', value!='<%= link %>')
+            span.help-block <%= errfor.link %>
+      div.row
+        div.col-sm-2
+          div.control-group(class!='<%= errfor.isActive ? "has-error" : "" %>')
+            label.control-label Is Active:
+            select.form-control(name='isActive')
+              option(value='yes') yes
+              option(value='no') no
+            span.help-block <%= errfor.isActive %>
+        div.col-sm-2
+          div.control-group(class!='<%= errfor.available ? "has-error" : "" %>')
+            label.control-label Available:
+            select.form-control(name='available')
+              option(value='yes') yes
+              option(value='no') no
+            span.help-block <%= errfor.available %>
+        div.col-sm-2
+          div.control-group(class!='<%= errfor.inStoreOnly ? "has-error" : "" %>')
+            label.control-label In-Store Only:
+            select.form-control(name='inStoreOnly')
+              option(value='yes') yes
+              option(value='no') no
+            span.help-block <%= errfor.inStoreOnly %>
+        div.col-sm-2
+          div.control-group(class!='<%= errfor.online ? "has-error" : "" %>')
+            label.control-label Online:
+            select.form-control(name='online')
+              option(value='yes') yes
+              option(value='no') no
+            span.help-block <%= errfor.online %>
+      div.row
+        div.col-sm-12
+          div.control-group
+            button.btn.btn-primary.btn-update(type='button') Update
+    
   script(type='text/template', id='data-record') !{data.record}

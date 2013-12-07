@@ -50,7 +50,7 @@ exports.find = function(req, res, next){
 };
 
 exports.read = function(req, res, next){
-  req.app.db.models.Page.findById(req.params.id).populate('roles.admin', 'data').populate('roles.account', 'data').exec(function(err, page) {
+  req.app.db.models.Page.findById(req.params.id).exec(function(err, page) {
     if (err) {
       return next(err);
     }
@@ -58,7 +58,7 @@ exports.read = function(req, res, next){
     if (req.xhr) {
       res.send(page);
     } else {
-      req.app.db.models.Deal.find({pageID: req.params.id}).exec(function(err, deals) {
+      req.app.db.models.Deal.find({'page.id': req.params.id}).exec(function(err, deals) {
         res.render('pages/details', { data: { record: JSON.stringify(page), deals: JSON.stringify(deals) } });
       });
     }
@@ -68,10 +68,8 @@ exports.read = function(req, res, next){
 exports.create = function(req, res, next){
   var workflow = req.app.utility.workflow(req, res);
   workflow.on('validate', function() {
-    console.log(req.body.data);
-    if (!req.body.data) {
-      workflow.outcome.errors.push('Data is required.');
-      console.log('no req.body.data');
+    if (!req.body.name) {
+      workflow.outcome.errors.push('Name is required.');
       return workflow.emit('response');
     }
     
@@ -80,7 +78,7 @@ exports.create = function(req, res, next){
   
   workflow.on('addPage', function() {
     var pageToAdd = {
-      data: req.body.data,
+      name: req.body.name,
       userCreated: {
         id: req.user._id,
         name: req.user.username,
@@ -102,4 +100,13 @@ exports.create = function(req, res, next){
   console.log('ok');
   
   workflow.emit('validate');
+};
+
+exports.deals = function(req, res, next){
+  req.app.db.models.Deal.find({'page.id': req.params.id}).exec(function(err, results) {
+    if (err) {
+      return next(err);
+    }
+    res.json(results);
+  });
 };

@@ -25,7 +25,7 @@ exports.init = function(req, res, next){
   
   req.app.db.models.Page.pagedFind({
     filters: filters,
-    keys: 'data',
+    keys: 'name',
     limit: req.query.limit,
     page: req.query.page,
     sort: req.query.sort

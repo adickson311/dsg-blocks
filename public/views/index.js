@@ -10,7 +10,7 @@
     defaults: {
       errors: [],
       errfor: {},
-      data: ''
+      name: ''
     },
     url: function() {
       return '/pages/'+ (this.isNew() ? '' : this.id +'/');
@@ -76,7 +76,7 @@
       }
       else {
         this.model.save({
-          data: this.$el.find('[name="name"]').val()
+          name: this.$el.find('[name="name"]').val()
         },{
           success: function(model, response) {
             if (response.success) {

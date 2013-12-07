@@ -38,10 +38,12 @@ exports = module.exports = function(app, passport) {
 	app.get('/pages/', require('./views/pages/index').find);
   app.post('/pages/', require('./views/pages/index').create);
 	app.get('/pages/:id/', require('./views/pages/index').read);
+	app.get('/pages/:id/deals/', require('./views/pages/index').deals);
 	
 	//app.get('/deals/', require('./views/deals/index').find);
   app.post('/deals/', require('./views/deals/index').create);
 	app.get('/deals/:id/', require('./views/deals/index').read);
+	app.put('/deals/:id/', require('./views/deals/index').update);
   
   //sign up
   app.get('/signup/', require('./views/signup/index').init);

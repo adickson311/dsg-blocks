@@ -8,7 +8,7 @@ block neck
 
 block feet
   //script(src='/vendor/require/require.js' data-main="vendor/dsg/main")
-  script(src='/views/pages/index.js')
+  script(src='/views/pages/details.js')
 
 block body
   div.blocks-form-container
@@ -20,30 +20,35 @@ block body
       -if (user)
         form.form-inline.pull-right
           div.input-group
-            input.form-control(name='name', type='text', placeholder='enter a name', value!='<%- name.full %>')
-            input.form-control(name='name', type='hidden', value!='<%- _id %>')
-            button.btn.btn-primary.btn-add(type='button') Add New
-      h1 <%- data %>
+            input.form-control(name='name', type='text', placeholder='enter a name')
+            input.form-control(name='pageID', type='hidden', value!='<%- _id %>')
+            input.form-control(name='pageName', type='hidden', value!='<%- name %>')
+            button.btn.btn-primary.btn-add(type='button') Create Deal
+      nav.breadcrumbs
+        a(href='/') Back to pages
+      h1 <%- name %>
   
   script(type='text/template', id='tmpl-results-table')
     table.table.table-striped
       thead
         tr
+          th.col-sm-3 Deal Name
+          th.col-sm-3 Headline
+          th.col-sm-4 Link
           -if (user)
-            th
-          th name
-          th id
-
+            th.col-sm-1
       tbody#results-rows
   
   script(type='text/template', id='tmpl-results-row')
+    td.stretch
+      a(href!='/deals/<%- _id %>/') <%- name %>
+    td.stretch 
+      <%- headline %>
+    td.nowrap
+      div <%- link %>
     -if (user)
       td
         input.btn.btn-default.btn-sm.btn-details(type='button', value='Edit')
-    td.stretch
-      <%- name %>
-    td.nowrap
-      div <%- _id %>
   
   script(type='text/template', id='tmpl-results-empty-row')
     tr
