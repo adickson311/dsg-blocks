@@ -1,1 +1,1 @@
-web: node run
+web: grunt
