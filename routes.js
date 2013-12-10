@@ -28,9 +28,10 @@ function ensureAccount(req, res, next) {
 }
 
 exports = module.exports = function(app, passport) {
-  app.all('/*', function(req, res, next) {
+  // CORS
+  app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", 'Content-Type');
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
   });
   
@@ -39,17 +40,17 @@ exports = module.exports = function(app, passport) {
   app.get('/about/', require('./views/about/index').init);
   app.get('/contact/', require('./views/contact/index').init);
   app.post('/contact/', require('./views/contact/index').sendMessage);
-	
-	//CUSTOM
-	app.get('/pages/', require('./views/pages/index').find);
+  
+  //CUSTOM
+  app.get('/pages/', require('./views/pages/index').find);
   app.post('/pages/', require('./views/pages/index').create);
-	app.get('/pages/:id/', require('./views/pages/index').read);
-	app.get('/pages/:id/deals/', require('./views/pages/index').deals);
-	
-	//app.get('/deals/', require('./views/deals/index').find);
+  app.get('/pages/:id/', require('./views/pages/index').read);
+  app.get('/pages/:id/deals/', require('./views/pages/index').deals);
+  
+  //app.get('/deals/', require('./views/deals/index').find);
   app.post('/deals/', require('./views/deals/index').create);
-	app.get('/deals/:id/', require('./views/deals/index').read);
-	app.put('/deals/:id/', require('./views/deals/index').update);
+  app.get('/deals/:id/', require('./views/deals/index').read);
+  app.put('/deals/:id/', require('./views/deals/index').update);
   
   //sign up
   app.get('/signup/', require('./views/signup/index').init);
