@@ -5,7 +5,7 @@ exports.mongodb = {
   uri: process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'localhost/dsg-blocks'
 };
 exports.companyName = 'Acme, Inc.';
-exports.projectName = 'Drywall';
+exports.projectName = 'DSG-Blocks';
 exports.systemEmail = 'adickson311@hotmail.com';
 exports.cryptoKey = 'k3yb0ardc4t';
 exports.requireAccountVerification = false;
