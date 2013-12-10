@@ -28,6 +28,12 @@ function ensureAccount(req, res, next) {
 }
 
 exports = module.exports = function(app, passport) {
+  app.all('/*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", 'Content-Type');
+    next();
+  });
+  
   //front end
   app.get('/', require('./views/index').init);
   app.get('/about/', require('./views/about/index').init);
