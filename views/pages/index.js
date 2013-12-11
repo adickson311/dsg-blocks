@@ -110,3 +110,7 @@ exports.deals = function(req, res, next){
     res.json(results);
   });
 };
+
+exports.preview = function(req, res){
+  res.render('pages/preview', {dealType: req.param.dealType});
+};

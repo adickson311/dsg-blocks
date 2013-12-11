@@ -67,8 +67,10 @@
   app.DetailsView = Backbone.View.extend({
     el: '#details',
     template: _.template( $('#tmpl-details-form').html() ),
+		dealIDKeyCount: 0,
     events: {
-      'click .btn-update': 'update'
+      'click .btn-update': 'update',
+      'input .link-control': 'dealIDUpdate'
     },
     initialize: function() {
       this.model = new app.Details();
@@ -126,6 +128,28 @@
         lPrice2: this.$el.find('[name="lPrice2"]').val(),
         link: this.$el.find('[name="link"]').val()  
       });
+    },
+    dealIDUpdate: function(){
+      this.dealIDKeyCount++;
+      setTimeout((function(self) {         //Self-executing func which takes 'this' as self
+          return function() {   //Return a function in the context of 'self'
+            self.grabProduct(self.dealIDKeyCount); //Thing you wanted to run as non-window 'this'
+          };
+        })(this), 1000);
+    },
+    grabProduct: function(keyCount){
+      if(keyCount === this.dealIDKeyCount){
+        var productID = this.$el.find('.link-control').val(),
+            requestURL = 'http://www.dickssportinggoods.com/product/index.jsp?productId='+productID;
+        
+        $.ajax(requestURL, {
+          context: document.body,
+					dataType: "html",
+          success: function(data){
+            console.log(data);
+          }
+        });
+      }
     }
   });
   

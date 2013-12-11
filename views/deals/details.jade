@@ -106,7 +106,7 @@ block body
         div.col-sm-12
           div.control-group(class!='<%= errfor.link ? "has-error" : "" %>')
             label.control-label Link:
-            input.form-control(type='text', name='link', value!='<%= link %>')
+            input.form-control.link-control(type='text', name='link', value!='<%= link %>')
             span.help-block <%= errfor.link %>
       div.row
         div.col-sm-2
