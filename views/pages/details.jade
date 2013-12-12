@@ -4,7 +4,7 @@ block head
   title Blocks Page
 
 block neck
-  link(rel='stylesheet', href='/views/pages/index.min.css?#{cacheBreaker}')
+  link(rel='stylesheet', href='/views/pages/details.min.css?#{cacheBreaker}')
 
 block feet
   //script(src='/vendor/require/require.js' data-main="vendor/dsg/main")
@@ -27,7 +27,7 @@ block body
       nav.breadcrumbs
         a(href='/') Back to pages
       h1 <%- name %>
-      a.page-preview(href!='/pages/<%- _id %>/preview/') Preview
+      //a.page-preview(href!='/pages/<%- _id %>/preview/') Preview
   
   script(type='text/template', id='tmpl-results-table')
     table.table.table-striped
