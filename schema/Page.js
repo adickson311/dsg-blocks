@@ -7,8 +7,9 @@ exports = module.exports = function(app, mongoose) {
       id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
       name: { type: String, default: '' },
       time: { type: Date, default: Date.now }
-    }
+    },
+    categories: [String]
   });
   pageSchema.plugin(require('./plugins/pagedFind'));
-	app.db.model('Page', pageSchema);
+  app.db.model('Page', pageSchema);
 };

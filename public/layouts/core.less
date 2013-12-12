@@ -49,6 +49,18 @@ select, textarea, input, .form-control {
   font-size: 16px; //ios input zoom prevention hack
 }
 
+nav{
+  ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+	  li {
+			display: inline;
+		}
+		
+	}		
+}
+
 .input-group-btn .btn-group:first-of-type .btn {
   .border-left-radius(0);
 }
@@ -141,5 +153,5 @@ select, textarea, input, .form-control {
   white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
   white-space: -pre-wrap; /* Opera 4-6 */
   white-space: -o-pre-wrap; /* Opera 7 */
-  word-wrap: break-word; /* Internet Explorer 5.5 & up */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
 }

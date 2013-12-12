@@ -14,6 +14,8 @@ block body
   div.blocks-form-container
     div#header
     div#results-table
+    div#categories.reveal-modal
+      h1 Categories
   
   script(type='text/template', id='tmpl-header')
     div.page-header
@@ -21,13 +23,18 @@ block body
         form.form-inline.pull-right
           div.input-group
             input.form-control(name='name', type='text', placeholder='enter a name')
-            input.form-control(name='pageID', type='hidden', value!='<%- _id %>')
+            input.form-control(name='pageID', type='hidden', value!='<%- id %>')
             input.form-control(name='pageName', type='hidden', value!='<%- name %>')
             button.btn.btn-primary.btn-add(type='button') Create Deal
       nav.breadcrumbs
         a(href='/') Back to pages
       h1 <%- name %>
-      //a.page-preview(href!='/pages/<%- _id %>/preview/') Preview
+      nav.actions
+        ul
+          li
+            a(href!='#' data-reveal-id='categories') Edit Categories
+          li
+            a.page-preview(href!='/pages/<%- id %>/preview/') Preview
   
   script(type='text/template', id='tmpl-results-table')
     table.table.table-striped
@@ -58,3 +65,32 @@ block body
   script(type='text/template', id='data-record') !{data.record}
 
   script(type='text/template', id='data-deals') !{data.deals}
+  
+  script(type='text/template', id='tmpl-category-form')
+    form.form-inline.pull-right
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-danger.alert-dismissable
+          button.close(type='button', data-dismiss='alert') &times;
+          |<%= err %>
+        |<% }); %>
+        |<% if (success) { %>
+        div.alert.alert-info.alert-dismissable
+          button.close(type='button', data-dismiss='alert') &times;
+          | Changes have been saved.
+        |<% } %>
+      div.row
+        div.col-sm-6
+          div.control-group(class!='<%= errfor.name ? "has-error" : "" %>')
+            label.control-label Name:
+            input.form-control(type='text', name='name', value!='<%= name %>')
+            span.help-block <%= errfor.name %>
+        div.col-sm-6
+          div.control-group(class!='<%= errfor.dealID ? "has-error" : "" %>')
+            label.control-label Deal ID:
+            input.form-control(type='text', name='dealID', value!='')
+            span.help-block <%= errfor.dealID %>
+      div.row
+        div.col-sm-12
+          div.control-group
+            button.btn.btn-primary.btn-update(type='button') Update

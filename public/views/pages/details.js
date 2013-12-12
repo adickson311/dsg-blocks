@@ -10,10 +10,10 @@
     defaults: {
       errors: [],
       errfor: {},
-      name: ''
+      name: '',
     },
     url: function() {
-      return '/pages/'+ (this.isNew() ? '' : this.id +'/');
+      return '/pages/'+ (this.isNew() ? '' : this._id +'/');
     }
   });
   
@@ -115,7 +115,7 @@
     el: '#results-table',
     template: _.template( $('#tmpl-results-table').html() ),
     initialize: function() {
-      this.collection = new app.RecordCollection( app.mainView.deals );
+      this.collection = app.mainView.deals;
       this.listenTo(this.collection, 'reset', this.render);
       this.render();
     },
@@ -159,14 +159,75 @@
     }
   });
   
+  app.CategoriesView = Backbone.View.extend({
+    el: '#categories',
+    template: _.template( $('#tmpl-category-form').html() ),
+    events: {
+      'submit form': 'preventSubmit',
+      'keypress input[type="text"]': 'addNewOnEnter',
+      'click .btn-add': 'addNew'
+    },
+    initialize: function() {
+      this.model = new app.Page();
+      this.syncUp();
+      this.listenTo(app.mainView.record, 'change', this.syncUp);
+      this.listenTo(this.model, 'sync', this.render);
+      this.render();
+    },
+    syncUp: function() {
+      this.model.set({
+        _id: app.mainView.record.id,
+        name: app.mainView.record.get('name'),
+        errors: app.mainView.record.get('errors'),
+        success: app.mainView.record.get('success')
+      });
+    },
+    render: function() {
+      this.$el.html(this.template( this.model.attributes ));
+    },
+    preventSubmit: function(event) {
+      event.preventDefault();
+    },
+    addNewOnEnter: function(event) {
+      if (event.keyCode !== 13) { return; }
+      event.preventDefault();
+      this.addNew();
+    },
+    addNew: function() {
+      if (this.$el.find('[name="name"]').val() === '') {
+        alert('Please enter a name.');
+      }
+      else {
+        this.model.save({
+          name: this.$el.find('[name="name"]').val(),
+          page: {
+            id: this.$el.find('[name="pageID"]').val(),
+            name: this.$el.find('[name="pageName"]').val()
+          }
+        },{
+          success: function(model, response) {
+            if (response.success) {
+              model.id = response.record._id;
+              location.href = model.url();
+            }
+            else {
+              alert(response.errors.join('\n'));
+            }
+          }
+        });
+      }
+    }
+  });
+  
   app.MainView = Backbone.View.extend({
     el: '.page .container',
     initialize: function() {
       app.mainView = this;
-      this.record = JSON.parse( unescape($('#data-record').html()) );
-      this.deals = JSON.parse( unescape($('#data-deals').html()) );
+      this.record = new app.Page( JSON.parse( unescape($('#data-record').html()) ));
+      this.deals = new app.RecordCollection(JSON.parse( unescape($('#data-deals').html()) ));
       app.headerView = new app.HeaderView();
       app.resultsView = new app.ResultsView();
+      app.categoriesView = new app.CategoriesView();
     }
   });
   

@@ -95,10 +95,10 @@
         startDate: app.mainView.model.get('startDate'),
         endDate: app.mainView.model.get('endDate'),
         headline: app.mainView.model.get('headline'),
-        disclaimer:  app.mainView.model.get('disclaimer'),
-        redPrice:  app.mainView.model.get('redPrice'),
-        lPrice1:  app.mainView.model.get('lPrice1'),
-        lPrice2:  app.mainView.model.get('lPrice2'),
+        disclaimer: app.mainView.model.get('disclaimer'),
+        redPrice: app.mainView.model.get('redPrice'),
+        lPrice1: app.mainView.model.get('lPrice1'),
+        lPrice2: app.mainView.model.get('lPrice2'),
         link: app.mainView.model.get('link')
       });
     },

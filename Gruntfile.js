@@ -74,6 +74,7 @@ module.exports = function(grunt) {
             'public/vendor/bootstrap/js/tab.js',
             'public/vendor/bootstrap/js/transition.js',
             'public/vendor/moment/moment.js',
+            'public/vendor/reveal/jquery.reveal.js',
             'public/layouts/core.js'
           ],
           'public/layouts/ie-sucks.min.js': [
@@ -127,7 +128,8 @@ module.exports = function(grunt) {
           'public/layouts/core.min.css': [
             'public/less/bootstrap-build.less',
             'public/vendor/font-awesome/less/font-awesome.less',
-            'public/layouts/core.less'
+            'public/layouts/core.less',
+            'public/vendor/reveal/reveal.less'
           ],
           'public/layouts/admin.min.css': ['public/layouts/admin.less']
         }
