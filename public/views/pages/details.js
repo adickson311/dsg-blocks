@@ -179,8 +179,7 @@
     },
     syncUp: function() {
       this.model.set({
-        _id: app.mainView.record.id,
-        name: app.mainView.record.get('name'),
+        categories: app.mainView.record.get('categories'),
         errors: app.mainView.record.get('errors'),
         success: app.mainView.record.get('success')
       });

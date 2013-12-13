@@ -67,7 +67,8 @@ block body
   script(type='text/template', id='data-deals') !{data.deals}
   
   script(type='text/template', id='tmpl-category-form')
-    form.form-inline.pull-right
+    h2 Categories
+    form.form-inline
       div.alerts
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
@@ -79,18 +80,11 @@ block body
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
-      div.row
-        div.col-sm-6
-          div.control-group(class!='<%= errfor.name ? "has-error" : "" %>')
-            label.control-label Name:
-            input.form-control(type='text', name='name', value!='<%= name %>')
-            span.help-block <%= errfor.name %>
-        div.col-sm-6
-          div.control-group(class!='<%= errfor.dealID ? "has-error" : "" %>')
-            label.control-label Deal ID:
-            input.form-control(type='text', name='dealID', value!='')
-            span.help-block <%= errfor.dealID %>
-      div.row
-        div.col-sm-12
-          div.control-group
-            button.btn.btn-primary.btn-update(type='button') Update
+      |<% _.each(categories, function(cat) { %>
+      |<% var i = categories.indexOf(cat) %>
+      div.control-group(class!='<%= errfor.name ? "has-error" : "" %>')
+        label.control-label Category:
+        input.form-control(type='text', name!='cat<%= i %>', value!='<%= cat %>')
+        span.help-block <%= errfor.name %>
+      |<% }); %>
+      button.btn.btn-primary.add(type='button') +

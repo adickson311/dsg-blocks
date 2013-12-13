@@ -12,8 +12,11 @@
     },
     sortData: function(){
       for (var i = 0; i < this.data.length; i++){
-        if(this.data[i][this.category]){
-          this.categoryData.push(this.data[i]);
+        var obj = this.data[i];
+        for(var j = 0; j < obj.categories.length; j++){
+          if(obj.categories[j] === this.category){
+            this.categoryData.push(obj);
+          }
         }
       }
       this.categoryData.sort(function(a,b){

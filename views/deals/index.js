@@ -52,7 +52,17 @@ exports.read = function(req, res, next){
     if (req.xhr) {
       res.send(deal);
     } else {
-      res.render('deals/details', { data: { record: JSON.stringify(deal) } });
+      req.app.db.models.Page.findById(deal.page.id).exec(function(err, page) {
+        if (err) {
+          return next(err);
+        }
+        
+        if (req.xhr) {
+          res.send(page);
+        } else {
+          res.render('deals/details', { data: { record: JSON.stringify(deal), page: JSON.stringify(page) } });
+        }
+      });
     }
   });
 };
