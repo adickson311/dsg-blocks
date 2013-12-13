@@ -75,7 +75,10 @@
       this.render();
     },
     render: function() {
-      this.$el.html(this.template( app.mainView.record ));
+      this.$el.html(this.template({
+        name: app.mainView.record.get('name'),
+        id: app.mainView.record.id
+      }));
     },
     preventSubmit: function(event) {
       event.preventDefault();
