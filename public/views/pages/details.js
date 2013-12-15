@@ -7,13 +7,13 @@
   
   app.Page = Backbone.Model.extend({
     idAttribute: '_id',
-    defaults: {
+    /*defaults: {
       errors: [],
       errfor: {},
       name: '',
-    },
+    },*/
     url: function() {
-      return '/pages/'+ (this.isNew() ? '' : this._id +'/');
+      return '/pages/'+ this._id +'/';
     }
   });
   
@@ -30,6 +30,28 @@
     },
     url: function() {
       return '/deals/'+ (this.isNew() ? '' : this.id +'/');
+    }
+  });
+
+  app.Categories = Backbone.Model.extend({
+    idAttribute: '_id',
+    defaults: {
+      success: false,
+      errors: [],
+      errfor: {},
+      categories: [],
+      newCategory: ''
+    },
+    url: function() {
+      return '/pages/'+ app.mainView.record.id +'/categories/';
+    },
+    parse: function(response) {
+      if (response.page) {
+        app.mainView.record.set(response.page);
+        delete response.page;
+      }
+      
+      return response;
     }
   });
   
@@ -166,12 +188,12 @@
     el: '#categories',
     template: _.template( $('#tmpl-category-form').html() ),
     events: {
-      'submit form': 'preventSubmit',
-      'keypress input[type="text"]': 'addNewOnEnter',
-      'click .btn-add': 'addNew'
+      'click .btn-add': 'add',
+      'click .btn-delete': 'delete',
+      'click .btn-set': 'saveCategories'
     },
     initialize: function() {
-      this.model = new app.Page();
+      this.model = new app.Categories();
       this.syncUp();
       this.listenTo(app.mainView.record, 'change', this.syncUp);
       this.listenTo(this.model, 'sync', this.render);
@@ -179,9 +201,8 @@
     },
     syncUp: function() {
       this.model.set({
-        categories: app.mainView.record.get('categories'),
-        errors: app.mainView.record.get('errors'),
-        success: app.mainView.record.get('success')
+        _id: app.mainView.record.id,
+        categories: app.mainView.record.get('categories')
       });
     },
     render: function() {
@@ -195,29 +216,37 @@
       event.preventDefault();
       this.addNew();
     },
-    addNew: function() {
-      if (this.$el.find('[name="name"]').val() === '') {
+    add: function(){
+      var newCategory = this.$el.find('[name="newCategory"]').val().trim();
+      if (!newCategory) {
         alert('Please enter a name.');
+        return;
       }
       else {
-        this.model.save({
-          name: this.$el.find('[name="name"]').val(),
-          page: {
-            id: this.$el.find('[name="pageID"]').val(),
-            name: this.$el.find('[name="pageName"]').val()
-          }
-        },{
-          success: function(model, response) {
-            if (response.success) {
-              model.id = response.record._id;
-              location.href = model.url();
-            }
-            else {
-              alert(response.errors.join('\n'));
-            }
+        var alreadyAdded = false;
+        _.each(this.model.get('categories'), function(cat) {
+          if (newCategory === cat) {
+            alreadyAdded = true;
           }
         });
+        if (alreadyAdded) {
+          alert('That name already exists.');
+          return;
+        }
       }
+      
+      this.model.get('categories').push(newCategory);      
+      this.render();
+    },
+    delete: function(event) {
+      if (confirm('Are you sure?')) {
+        var idx = this.$el.find('.btn-delete').index(event.currentTarget);
+        this.model.get('categories').splice(idx, 1);
+        this.render();
+      }
+    },
+    saveCategories: function() {
+      this.model.save();
     }
   });
   

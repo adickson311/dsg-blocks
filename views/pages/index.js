@@ -111,6 +111,44 @@ exports.deals = function(req, res, next){
   });
 };
 
+exports.categories = function(req, res, next){
+  var workflow = req.app.utility.workflow(req, res);
+  
+  workflow.on('validate', function() {
+    if (!req.body.categories) {
+      workflow.outcome.errfor.categories = 'required';
+      return workflow.emit('response');
+    }
+    
+    workflow.emit('patchPage');
+  });
+  
+  workflow.on('patchPage', function() {
+    var fieldsToSet = {
+      categories: req.body.categories
+    };
+    console.log("!!: " + req.params.id + " :: " +req.body.categories);
+    req.app.db.models.Page.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, page) {
+      if (err) {
+        return workflow.emit('exception', err);
+      }
+
+      workflow.emit('response');
+      
+      /*page.populate('name', function(err, page) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+        
+        workflow.outcome.page = page;
+        workflow.emit('response');
+      });*/
+    });
+  });
+  
+  workflow.emit('validate');
+};
+
 exports.preview = function(req, res){
   res.render('pages/preview', {dealType: req.param.dealType});
 };

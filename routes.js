@@ -43,13 +43,17 @@ exports = module.exports = function(app, passport) {
   app.post('/contact/', require('./views/contact/index').sendMessage);
   
   //CUSTOM
+
+  //Pages
   app.get('/pages/', require('./views/pages/index').find);
   app.post('/pages/', require('./views/pages/index').create);
   app.get('/pages/:id/', require('./views/pages/index').read);
   app.get('/pages/:id/deals/', require('./views/pages/index').deals);
   app.options('/pages/:id/deals/', require('./views/pages/index').deals);
+  app.put('/pages/:id/categories/', require('./views/pages/index').categories);
 	app.get('/pages/:id/preview/', require('./views/pages/index').preview);
   
+  //Deals
   //app.get('/deals/', require('./views/deals/index').find);
   app.post('/deals/', require('./views/deals/index').create);
   app.get('/deals/:id/', require('./views/deals/index').read);

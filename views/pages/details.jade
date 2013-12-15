@@ -80,11 +80,27 @@ block body
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
-      |<% _.each(categories, function(cat) { %>
-      |<% var i = categories.indexOf(cat) %>
-      div.control-group(class!='<%= errfor.name ? "has-error" : "" %>')
-        label.control-label Category:
-        input.form-control(type='text', name!='cat<%= i %>', value!='<%= cat %>')
-        span.help-block <%= errfor.name %>
-      |<% }); %>
-      button.btn.btn-primary.add(type='button') +
+      div.control-group(class!='<%= errfor.newCategory ? "has-error" : "" %>')
+        label.control-label New Category:
+        div.input-group
+          input.form-control(type='text', name!='newCategory', placeholder!='enter a name')
+          div.input-group-btn
+            button.btn.btn-success.btn-add(type='button') Add
+        span.help-block <%= errfor.newCategory %>
+      div.control-group.list-group(class!='<%= errfor.categories ? "has-error" : "" %>')
+        label.control-label Categories:
+        div.categories
+        |<% _.each(categories, function(cat) { %>
+        |<% var i = categories.indexOf(cat) %>
+        div.input-group(class!='<%= errfor.name ? "has-error" : "" %>')
+          input.form-control(disabled=true, value!='<%= cat %>')
+          div.input-group-btn
+            button.btn.btn-danger.btn-delete(type='button')
+              i.fa.fa-trash-o.fa-inverse
+        |<% }); %>
+        |<% if (categories.length == 0) { %>
+        span.badge no permissions defined
+        |<% } %>
+        span.help-block <%= errfor.categories %>
+      div.control-group
+        button.btn.btn-primary.btn-set(type='button') Save Settings
