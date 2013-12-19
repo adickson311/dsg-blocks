@@ -12,6 +12,18 @@
     }
   });
   
+  app.Page = Backbone.Model.extend({
+    idAttribute: '_id',
+    /*defaults: {
+      errors: [],
+      errfor: {},
+      name: '',
+    },*/
+    url: function() {
+      return '/pages/'+ this.id +'/';
+    }
+  });
+  
   app.Delete = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -30,9 +42,9 @@
       success: false,
       errors: [],
       errfor: {},
+      page: {},
       isActive: '',
       name: '',
-      pageID: '',
       dealID: '',
       available: '',
       inStoreOnly: '',
@@ -64,13 +76,27 @@
     }
   });
   
+  app.CategoryItemView = Backbone.View.extend({
+    tagName: 'div',
+    template: _.template( $('#tmpl-category-item').html() ),
+    events: {
+      'click .btn-details': 'viewDetails'
+    },
+    viewDetails: function() {
+      location.href = this.model.url();
+    },
+    render: function() {
+      this.$el.html(this.template( this.model.attributes ));
+    }
+  });
+  
   app.DetailsView = Backbone.View.extend({
     el: '#details',
     template: _.template( $('#tmpl-details-form').html() ),
-		dealIDKeyCount: 0,
+    dealIDKeyCount: 0,
     events: {
-      'click .btn-update': 'update',
-      'input .link-control': 'dealIDUpdate'
+      'click .btn-update': 'update'
+      //'input .link-control': 'dealIDUpdate'
     },
     initialize: function() {
       this.model = new app.Details();
@@ -84,10 +110,7 @@
         _id: app.mainView.model.id,
         isActive: app.mainView.model.get('isActive'),
         name: app.mainView.model.get('name'),
-        page:{
-          name: app.mainView.model.get('page').name,
-          id: app.mainView.model.get('page').id
-        },
+        page: app.mainView.model.get('page'),
         dealID: app.mainView.model.get('dealID'),
         available: app.mainView.model.get('available'),
         inStoreOnly: app.mainView.model.get('inStoreOnly'),
@@ -113,6 +136,7 @@
     },
     update: function() {
       this.model.save({
+        page: app.mainView.model.get('page')._id,
         isActive: this.$el.find('[name="isActive"]').val(),
         name: this.$el.find('[name="name"]').val(),
         dealID: this.$el.find('[name="dealID"]').val(),
@@ -126,7 +150,7 @@
         redPrice: this.$el.find('[name="redPrice"]').val(),
         lPrice1: this.$el.find('[name="lPrice1"]').val(),
         lPrice2: this.$el.find('[name="lPrice2"]').val(),
-        link: this.$el.find('[name="link"]').val()  
+        link: this.$el.find('[name="link"]').val()
       });
     },
     dealIDUpdate: function(){
@@ -144,7 +168,7 @@
         
         $.ajax(requestURL, {
           context: document.body,
-					dataType: "html",
+          dataType: "html",
           success: function(data){
             console.log(data);
           }
@@ -157,7 +181,7 @@
     el: '.page .container',
     initialize: function() {
       app.mainView = this;
-      this.model = new app.Deal( JSON.parse( unescape($('#data-record').html())) );  
+      this.model = new app.Deal( JSON.parse( unescape($('#data-record').html())) );
       app.headerView = new app.HeaderView();
       app.detailsView = new app.DetailsView();
     }

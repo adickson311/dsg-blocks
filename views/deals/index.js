@@ -18,10 +18,7 @@ exports.create = function(req, res, next){
   workflow.on('addDeal', function() {
     var dealToAdd = {
       name:  req.body.name,
-      page: {
-        id:  req.body.page.id,
-        name:  req.body.page.name
-      },
+      page: req.body.page.id,
       userCreated: {
         id: req.user._id,
         name: req.user.username,
@@ -44,7 +41,7 @@ exports.create = function(req, res, next){
 
 
 exports.read = function(req, res, next){
-  req.app.db.models.Deal.findById(req.params.id).exec(function(err, deal) {
+  req.app.db.models.Deal.findById(req.params.id).populate('page').exec(function(err, deal) {
     if (err) {
       return next(err);
     }
@@ -52,17 +49,7 @@ exports.read = function(req, res, next){
     if (req.xhr) {
       res.send(deal);
     } else {
-      req.app.db.models.Page.findById(deal.page.id).exec(function(err, page) {
-        if (err) {
-          return next(err);
-        }
-        
-        if (req.xhr) {
-          res.send(page);
-        } else {
-          res.render('deals/details', { data: { record: JSON.stringify(deal), page: JSON.stringify(page) } });
-        }
-      });
+      res.render('deals/details', { data: { record: JSON.stringify(deal) } });
     }
   });
 };
@@ -103,10 +90,7 @@ exports.update = function(req, res, next){
       isActive: req.body.isActive,
       name: req.body.name,
       headline: req.body.headline,
-      page: {
-        name: req.body.page.name,
-        id: req.body.page.id
-      },
+      page: req.body.page,
       link: req.body.link.toLowerCase()
     };
     
@@ -119,6 +103,6 @@ exports.update = function(req, res, next){
       return workflow.emit('response');
     });
   });
-	
+  
   workflow.emit('validate');
 };

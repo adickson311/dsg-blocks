@@ -20,7 +20,7 @@ block body
       nav.breadcrumbs
         a(href='/') Pages
         span.divider >
-        a(href!='/pages/<%- page.id %>/') <%- page.name %>
+        a(href!='/pages/<%- page._id %>/') <%- page.name %>
         span.divider >
         <%- name %>
       h1 <%- name %>
@@ -38,6 +38,13 @@ block body
     p <%= lPrice1 %>
     p <%= lPrice2 %>
     p <%= link %>
+  
+  script(type='text/template', id='tmpl-category-item')
+    div.input-group(class!='<%= errfor.name ? "has-error" : "" %>')
+      input.form-control(disabled=true, value!='')
+      div.input-group-btn
+        button.btn.btn-danger.btn-delete(type='button')
+          i.fa.fa-trash-o.fa-inverse
   
   script(type='text/template', id='tmpl-details-form')
     fieldset
@@ -59,7 +66,6 @@ block body
             label.control-label Name:
             input.form-control(type='text', name='name', value!='<%= name %>')
             span.help-block <%= errfor.name %>
-        div.col-sm-6
           div.control-group(class!='<%= errfor.dealID ? "has-error" : "" %>')
             label.control-label Deal ID:
             input.form-control(type='text', name='dealID', value!='<%= dealID %>')
@@ -143,3 +149,5 @@ block body
             button.btn.btn-primary.btn-update(type='button') Update
     
   script(type='text/template', id='data-record') !{data.record}
+
+  script(type='text/template', id='data-page') !{data.page}

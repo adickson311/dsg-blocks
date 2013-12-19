@@ -64,7 +64,7 @@ exports.read = function(req, res, next){
   };
   
   var getDeals = function(callback) {
-    req.app.db.models.Deal.find({'page.id': req.params.id}).exec(function(err, deals) {
+    req.app.db.models.Deal.find({'page': req.params.id}).exec(function(err, deals) {
       if (err) {
         return next(err);
       }
