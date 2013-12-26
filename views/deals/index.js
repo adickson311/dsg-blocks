@@ -106,3 +106,48 @@ exports.update = function(req, res, next){
   
   workflow.emit('validate');
 };
+
+exports.categories = function(req, res, next){
+  var workflow = req.app.utility.workflow(req, res);
+  
+  workflow.on('validate', function() {
+    /*if (!req.body.name) {
+      workflow.outcome.errfor.username = 'required';
+    }
+    else if (!/^[a-zA-Z0-9\-\_]+$/.test(req.body.username)) {
+      workflow.outcome.errfor.username = 'only use letters, numbers, \'-\', \'_\'';
+    }
+    
+    if (!req.body.email) {
+      workflow.outcome.errfor.email = 'required';
+    }
+    else if (!/^[a-zA-Z0-9\-\_\.\+]+@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+$/.test(req.body.email)) {
+      workflow.outcome.errfor.email = 'invalid email format';
+    }*/
+    
+    if (workflow.hasErrors()) {
+      return workflow.emit('response');
+    }
+    
+    workflow.emit('patchDeal');
+  });
+  
+  
+  
+  workflow.on('patchDeal', function() {
+    var fieldsToSet = {
+      categories: req.body.categories
+    };
+    
+    req.app.db.models.Deal.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, deal) {
+      if (err) {
+        return workflow.emit('exception', err);
+      }
+      
+      workflow.outcome.record = deal;
+      return workflow.emit('response');
+    });
+  });
+  
+  workflow.emit('validate');
+};

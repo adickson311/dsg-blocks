@@ -63,7 +63,7 @@ block body
           |<% _.each(pageCategories, function(cat) { %>
           div.row
             div.col-sm-2
-              input.form-control.col-sm-3.catOrder(value!='')
+              input.form-control.col-sm-3.catOrder(value!='', name!="cat<%= _.indexOf(pageCategories, cat) %>")
             div.col-sm-10
               input.form-control(disabled=true, value!='<%= cat %>')
           |<% }); %>

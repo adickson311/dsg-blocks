@@ -57,8 +57,8 @@
       return '/deals/'+ app.mainView.model.id +'/';
     }
   });
-	
-	app.Categories = Backbone.Model.extend({
+  
+  app.Categories = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
       success: false,
@@ -179,8 +179,8 @@
       }
     }
   });
-	
-	app.CategoriesView = Backbone.View.extend({
+  
+  app.CategoriesView = Backbone.View.extend({
     el: '#categories',
     template: _.template( $('#tmpl-categories').html() ),
     events: {
@@ -200,20 +200,25 @@
       });
     },
     render: function() {
+      var cats = app.mainView.model.get('categories');
       this.$el.html(this.template( {record: this.model.attributes, pageCategories: app.mainView.model.get('page').categories } ));
       
-      for (var key in this.model.attributes) {
-        if (this.model.attributes.hasOwnProperty(key)) {
-          this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
-        }
+      for (var i=0; i< cats.length; i++) {
+        var st = '[name="cat'+ i +'"]';
+        this.$el.find(st).val(cats[i].order);
       }
     },
     saveCategories: function() {
-			/*var changedPermissions = this.$el.find('.catOrder').map(function(item){
-				return item.val().trim();
-			});
-			this.model.set('permissions', sorted);
-			this.model.save();*/
+      var that = this,
+          sorted = [];
+      
+      this.$el.find('.catOrder').each(function(i){
+        if(this.value !== ""){
+          sorted.push({name: that.model.get('categories')[i], order: this.value});
+        }
+      });
+      this.model.set('categories', sorted);
+      this.model.save();
     }
   });
   
