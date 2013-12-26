@@ -14,11 +14,6 @@
   
   app.Page = Backbone.Model.extend({
     idAttribute: '_id',
-    /*defaults: {
-      errors: [],
-      errfor: {},
-      name: '',
-    },*/
     url: function() {
       return '/pages/'+ this.id +'/';
     }
@@ -62,6 +57,28 @@
       return '/deals/'+ app.mainView.model.id +'/';
     }
   });
+	
+	app.Categories = Backbone.Model.extend({
+    idAttribute: '_id',
+    defaults: {
+      success: false,
+      errors: [],
+      errfor: {},
+      categories: [],
+      newPermission: ''
+    },
+    url: function() {
+      return '/deals/'+ app.mainView.model.id +'/categories/';
+    },
+    parse: function(response) {
+      if (response.deal) {
+        app.mainView.model.set(response.deal);
+        delete response.deal;
+      }
+      
+      return response;
+    }
+  });
   
   app.HeaderView = Backbone.View.extend({
     el: '#header',
@@ -70,20 +87,6 @@
       this.model = app.mainView.model;
       this.listenTo(this.model, 'sync', this.render);
       this.render();
-    },
-    render: function() {
-      this.$el.html(this.template( this.model.attributes ));
-    }
-  });
-  
-  app.CategoryItemView = Backbone.View.extend({
-    tagName: 'div',
-    template: _.template( $('#tmpl-category-item').html() ),
-    events: {
-      'click .btn-details': 'viewDetails'
-    },
-    viewDetails: function() {
-      location.href = this.model.url();
     },
     render: function() {
       this.$el.html(this.template( this.model.attributes ));
@@ -176,6 +179,43 @@
       }
     }
   });
+	
+	app.CategoriesView = Backbone.View.extend({
+    el: '#categories',
+    template: _.template( $('#tmpl-categories').html() ),
+    events: {
+      'click .btn-set': 'saveCategories'
+    },
+    initialize: function() {
+      this.model = new app.Categories();
+      this.syncUp();
+      this.listenTo(app.mainView.model, 'change', this.syncUp);
+      this.listenTo(this.model, 'sync', this.render);
+      this.render();
+    },
+    syncUp: function() {
+      this.model.set({
+        _id: app.mainView.model.id,
+        categories: app.mainView.model.get('categories')
+      });
+    },
+    render: function() {
+      this.$el.html(this.template( {record: this.model.attributes, pageCategories: app.mainView.model.get('page').categories } ));
+      
+      for (var key in this.model.attributes) {
+        if (this.model.attributes.hasOwnProperty(key)) {
+          this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+        }
+      }
+    },
+    saveCategories: function() {
+			/*var changedPermissions = this.$el.find('.catOrder').map(function(item){
+				return item.val().trim();
+			});
+			this.model.set('permissions', sorted);
+			this.model.save();*/
+    }
+  });
   
   app.MainView = Backbone.View.extend({
     el: '.page .container',
@@ -184,6 +224,7 @@
       this.model = new app.Deal( JSON.parse( unescape($('#data-record').html())) );
       app.headerView = new app.HeaderView();
       app.detailsView = new app.DetailsView();
+      app.categoriesView = new app.CategoriesView();
     }
   });
   
