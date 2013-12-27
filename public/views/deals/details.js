@@ -226,16 +226,25 @@
       });
     },
     render: function() {
-      var cats = this.model.get('categories');
+      var cats = this.model.get('categories'),
+          that = this;
       this.$el.html(this.template( {record: this.model.attributes, pageCategories: app.mainView.model.get('page').categories } ));
       
-      for (var i=0; i< cats.length; i++) {
-        var st = '[name="cat'+ i +'"]';
-        this.$el.find(st).val(cats[i].order);
-      }
+      this.$el.find('.categories .row').each(function(){
+        var nameInput = $(this).find('.col-sm-10 input');
+        for(var j=0; j<cats.length; j++){
+          if(that.formatName(nameInput.val()) === cats[j].name){
+            $(this).find('.col-sm-2 input').val((cats[j].order));
+          }
+        }
+      });
+    },
+    formatName: function (input){
+      return input.split(" ")[0].toLowerCase() + input.split(" ").splice(1, input.length-2).join("");
     },
     saveCategories: function() {
-      var filtered = [];
+      var filtered = [],
+          that = this;
       
       this.$el.find('.categories .row').each(function(){
         var name = $(this).find('.col-sm-10 input').val(),
@@ -243,7 +252,7 @@
         
         if(value !== ""){
           filtered.push({
-            name: name.split(" ")[0].toLowerCase() + name.split(" ").splice(1, name.length-2).join(""),
+            name: that.formatName(name),
             order: value
           });
         }
