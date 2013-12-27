@@ -189,8 +189,8 @@ exports.preview = function(req, res, next){
     } else {
       res.render('pages/preview', { 
         data: { 
-          dealType: req.param.dealType,
-          record: page 
+          dealType: req.query.dealType,
+          record: page
         }
       });
     }

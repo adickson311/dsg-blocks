@@ -220,9 +220,14 @@
       this.render();
     },
     syncUp: function() {
+      var cats = app.mainView.model.get('categories');
+			if(cats.length === 0){
+        cats = app.mainView.model.get('page').categories;
+      }
+      
       this.model.set({
         _id: app.mainView.model.id,
-        categories: app.mainView.model.get('categories')
+        categories: cats
       });
     },
     render: function() {
