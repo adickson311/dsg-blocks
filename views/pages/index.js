@@ -156,7 +156,7 @@ exports.categories = function(req, res, next){
     var fieldsToSet = {
       categories: req.body.categories
     };
-    console.log("!!: " + req.params.id + " :: " +req.body.categories);
+    
     req.app.db.models.Page.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, page) {
       if (err) {
         return workflow.emit('exception', err);
@@ -178,6 +178,21 @@ exports.categories = function(req, res, next){
   workflow.emit('validate');
 };
 
-exports.preview = function(req, res){
-  res.render('pages/preview', {dealType: req.param.dealType});
+exports.preview = function(req, res, next){
+  req.app.db.models.Page.findById(req.params.id).exec(function(err, page) {
+    if (err) {
+      return next(err);
+    }
+    
+    if (req.xhr) {
+      res.send(page);
+    } else {
+      res.render('pages/preview', { 
+        data: { 
+          dealType: req.param.dealType,
+          record: page 
+        }
+      });
+    }
+  });
 };
