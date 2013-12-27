@@ -221,7 +221,7 @@
     },
     syncUp: function() {
       var cats = app.mainView.model.get('categories');
-			if(cats.length === 0){
+      if(cats.length === 0){
         cats = app.mainView.model.get('page').categories;
       }
       

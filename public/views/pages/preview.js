@@ -35,8 +35,7 @@
     buildBlocks: function(){
       var todaysDate = this.convertUTC(new Date()); // current date/time converted to UTC
       $('#blockContainer').empty(); // Wipes content of block container.
-        
-      // build blocks decision tree
+      
       for(var i=0; i<this.categoryData.length; i++){
         var blockObj = this.categoryData[i],
             block = $($('#block_template').html()).clone().removeClass('shopBlockTemplate').addClass('block'),
@@ -46,20 +45,21 @@
         
         // check to see if current date/time is between start and end date/times
         if(startDate < todaysDate && todaysDate < endDate){
-          // Add the correct link
+          // Check values to find correct link
           if(blockObj.available){
             if(blockObj.inStoreOnly){
-              if(!blockObj.online){
-                linkTmpl = $('#iso_link_template').html();
-                block.find('img').attr('style', '');
-                block.find('.disclaimer').after($(linkTmpl));
-              }            
+              // Find A Store
+              linkTmpl = $('#iso_link_template').html();
+              block.find('img').attr('style', '');
+              block.find('.disclaimer').after($(linkTmpl));
             } else {
+              // Shop Now
               linkTmpl = $('#shop_link_template').html();
               block.find('.disclaimer').after($(linkTmpl));
             }            
           } else {
             if(!blockObj.online && !blockObj.inStoreOnly){
+              // Sold Out
               linkTmpl = $('#soldout_link_template').html();
               block.find('.disclaimer').after($(linkTmpl));
               block.prepend($($('#soldout_image_template').html()));
