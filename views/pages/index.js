@@ -132,7 +132,7 @@ exports.create = function(req, res, next){
 };
 
 exports.deals = function(req, res, next){
-  req.app.db.models.Deal.find({'page.id': req.params.id}).exec(function(err, results) {
+  req.app.db.models.Deal.find({'page': req.params.id}).exec(function(err, results) {
     if (err) {
       return next(err);
     }

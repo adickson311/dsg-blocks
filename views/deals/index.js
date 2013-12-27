@@ -87,10 +87,15 @@ exports.update = function(req, res, next){
   
   workflow.on('patchDeal', function() {
     var fieldsToSet = {
-      isActive: req.body.isActive,
       name: req.body.name,
-      headline: req.body.headline,
       page: req.body.page,
+      headline: req.body.headline,
+      disclaimer: req.body.disclaimer,
+      available: req.body.available,
+      inStoreOnly: req.body.inStoreOnly,
+      online: req.body.online,
+      startDate: req.body.startDate,
+      endDate: req.body.endDate,
       link: req.body.link.toLowerCase()
     };
     

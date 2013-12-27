@@ -106,11 +106,11 @@ block body
         span.help-block <%= errfor.disclaimer %>
       div.control-group(class!='<%= errfor.startDate ? "has-error" : "" %>')
         label.control-label Start Date:
-        input.form-control(type='date', name='startDate', value!='<%= startDate %>')
+        input.form-control(type='text', name='startDate', value!='<%= startDate %>')
         span.help-block <%= errfor.startDate %>
       div.control-group(class!='<%= errfor.endDate ? "has-error" : "" %>')
         label.control-label End Date:
-        input.form-control(type='date', name='endDate', value!='<%= endDate %>')
+        input.form-control(type='text', name='endDate', value!='<%= endDate %>')
         span.help-block <%= errfor.endDate %>
       div.row
         div.col-sm-4
@@ -135,28 +135,21 @@ block body
             input.form-control.link-control(type='text', name='link', value!='<%= link %>')
             span.help-block <%= errfor.link %>
       div.row
-        div.col-sm-3
-          div.control-group(class!='<%= errfor.isActive ? "has-error" : "" %>')
-            label.control-label Is Active:
-            select.form-control(name='isActive')
-              option(value='yes') yes
-              option(value='no') no
-            span.help-block <%= errfor.isActive %>
-        div.col-sm-3
+        div.col-sm-4
           div.control-group(class!='<%= errfor.available ? "has-error" : "" %>')
             label.control-label Available:
             select.form-control(name='available')
               option(value='yes') yes
               option(value='no') no
             span.help-block <%= errfor.available %>
-        div.col-sm-3
+        div.col-sm-4
           div.control-group(class!='<%= errfor.inStoreOnly ? "has-error" : "" %>')
             label.control-label In-Store Only:
             select.form-control(name='inStoreOnly')
               option(value='yes') yes
               option(value='no') no
             span.help-block <%= errfor.inStoreOnly %>
-        div.col-sm-3
+        div.col-sm-4
           div.control-group(class!='<%= errfor.online ? "has-error" : "" %>')
             label.control-label Online:
             select.form-control(name='online')

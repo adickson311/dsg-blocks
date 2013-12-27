@@ -37,13 +37,12 @@
       success: false,
       errors: [],
       errfor: {},
-      page: {},
-      isActive: '',
       name: '',
+      page: {},
+      available: true,
+      inStoreOnly: false,
+      online: true,
       dealID: '',
-      available: '',
-      inStoreOnly: '',
-      online: '',
       startDate: '',
       endDate: '',
       headline: '',
@@ -55,6 +54,14 @@
     },
     url: function() {
       return '/deals/'+ app.mainView.model.id +'/';
+    },
+    parse: function(response) {
+      if (response.record) {
+        app.mainView.model.set(response.record);
+        delete response.record;
+      }
+      
+      return response;
     }
   });
   
@@ -109,15 +116,24 @@
       this.render();
     },
     syncUp: function() {
+      var booleans = [
+        app.mainView.model.get('available'),
+        app.mainView.model.get('inStoreOnly'),
+        app.mainView.model.get('online')
+      ];
+      
+      booleans = $.map(booleans, function(item){
+        return (item) ? "yes" : "no";
+      });
+      
       this.model.set({
         _id: app.mainView.model.id,
-        isActive: app.mainView.model.get('isActive'),
         name: app.mainView.model.get('name'),
         page: app.mainView.model.get('page'),
         dealID: app.mainView.model.get('dealID'),
-        available: app.mainView.model.get('available'),
-        inStoreOnly: app.mainView.model.get('inStoreOnly'),
-        online: app.mainView.model.get('online'),
+        available: booleans[0],
+        inStoreOnly: booleans[1],
+        online: booleans[2],
         startDate: app.mainView.model.get('startDate'),
         endDate: app.mainView.model.get('endDate'),
         headline: app.mainView.model.get('headline'),
@@ -136,16 +152,26 @@
           this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
         }
       }
+      
+      $('[name="startDate"]').datepicker();
+      $('[name="endDate"]').datepicker();
     },
     update: function() {
+      var booleans = [
+        this.$el.find('[name="available"]').val(),
+        this.$el.find('[name="inStoreOnly"]').val(),
+        this.$el.find('[name="online"]').val()
+      ];
+      booleans = $.map(booleans, function(item){
+        return (item === 'yes');
+      });
       this.model.save({
         page: app.mainView.model.get('page')._id,
-        isActive: this.$el.find('[name="isActive"]').val(),
         name: this.$el.find('[name="name"]').val(),
         dealID: this.$el.find('[name="dealID"]').val(),
-        available: this.$el.find('[name="available"]').val(),
-        inStoreOnly: this.$el.find('[name="inStoreOnly"]').val(),
-        online: this.$el.find('[name="online"]').val(),
+        available: booleans[0],
+        inStoreOnly: booleans[1],
+        online: booleans[2],
         startDate: this.$el.find('[name="startDate"]').val(),
         endDate: this.$el.find('[name="endDate"]').val(),
         headline: this.$el.find('[name="headline"]').val(),
@@ -200,7 +226,7 @@
       });
     },
     render: function() {
-      var cats = app.mainView.model.get('categories');
+      var cats = this.model.get('categories');
       this.$el.html(this.template( {record: this.model.attributes, pageCategories: app.mainView.model.get('page').categories } ));
       
       for (var i=0; i< cats.length; i++) {
@@ -209,15 +235,20 @@
       }
     },
     saveCategories: function() {
-      var that = this,
-          sorted = [];
+      var filtered = [];
       
-      this.$el.find('.catOrder').each(function(i){
-        if(this.value !== ""){
-          sorted.push({name: that.model.get('categories')[i], order: this.value});
+      this.$el.find('.categories .row').each(function(){
+        var name = $(this).find('.col-sm-10 input').val(),
+            value = $(this).find('.col-sm-2 input').val();
+        
+        if(value !== ""){
+          filtered.push({
+            name: name.split(" ")[0].toLowerCase() + name.split(" ").splice(1, name.length-2).join(""),
+            order: value
+          });
         }
       });
-      this.model.set('categories', sorted);
+      this.model.set('categories', filtered);
       this.model.save();
     }
   });
