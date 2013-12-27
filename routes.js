@@ -58,6 +58,7 @@ exports = module.exports = function(app, passport) {
   app.post('/deals/', require('./views/deals/index').create);
   app.get('/deals/:id/', require('./views/deals/index').read);
   app.put('/deals/:id/', require('./views/deals/index').update);
+  app.put('/deals/:id/categories/', require('./views/deals/index').categories);
   
   //sign up
   app.get('/signup/', require('./views/signup/index').init);

@@ -14,19 +14,14 @@
       for (var i = 0; i < this.data.length; i++){
         var obj = this.data[i];
         for(var j = 0; j < obj.categories.length; j++){
-          if(obj.categories[j] === this.category){
+          if(obj.categories[j].name === this.category){
             this.categoryData.push(obj);
+            obj.order = obj.categories[j].order;
           }
         }
       }
       this.categoryData.sort(function(a,b){
-        if (a[this.category] > b[this.category]){
-          return 1;
-        }
-        if (a[this.category] < b[this.category]){
-          return -1;
-        }
-        return 0;
+        return b.order - a.order;
       });
       
       this.buildBlocks();
@@ -34,14 +29,13 @@
     convertUTC: function(date) {
       return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());  
     },
-		relocate: function(){
+    relocate: function(){
       window.location = $(this).find('a').attr('href');
-		},
+    },
     buildBlocks: function(){
       var todaysDate = this.convertUTC(new Date()); // current date/time converted to UTC
       $('#blockContainer').empty(); // Wipes content of block container.
-        
-      // build blocks decision tree
+      
       for(var i=0; i<this.categoryData.length; i++){
         var blockObj = this.categoryData[i],
             block = $($('#block_template').html()).clone().removeClass('shopBlockTemplate').addClass('block'),
@@ -51,20 +45,21 @@
         
         // check to see if current date/time is between start and end date/times
         if(startDate < todaysDate && todaysDate < endDate){
-          // Add the correct link
+          // Check values to find correct link
           if(blockObj.available){
-            if(blockObj.iso){
-              if(!blockObj.online){
-                linkTmpl = $('#iso_link_template').html();
-                block.find('img').attr('style', '');
-                block.find('.disclaimer').after($(linkTmpl));
-              }            
+            if(blockObj.inStoreOnly){
+              // Find A Store
+              linkTmpl = $('#iso_link_template').html();
+              block.find('img').attr('style', '');
+              block.find('.disclaimer').after($(linkTmpl));
             } else {
+              // Shop Now
               linkTmpl = $('#shop_link_template').html();
               block.find('.disclaimer').after($(linkTmpl));
             }            
           } else {
-            if(!blockObj.online && !blockObj.iso){
+            if(!blockObj.online && !blockObj.inStoreOnly){
+              // Sold Out
               linkTmpl = $('#soldout_link_template').html();
               block.find('.disclaimer').after($(linkTmpl));
               block.prepend($($('#soldout_image_template').html()));
@@ -104,10 +99,10 @@
           block.find('.shopLink').attr('href', blockObj.link+'&ab=blocks_holiday2013_'+blockObj.dealID);
   
           // IE hack - fixes inline-block display.
-          if($.browser.msie){ 
+         /* if($.browser.msie){ 
             // Not like this is ever going to happen, because I doubt we'll ever get upgraded, but does not work with jQ v 1.9+ without jQ's migrate script.
             block.css('display','inline');  
-          }
+          }*/
           $('#blockContainer').append(block);
           // re-attach click event to entire block.
           block.on('click', this.relocate, this);

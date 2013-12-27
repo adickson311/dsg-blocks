@@ -59,6 +59,7 @@ module.exports = function(grunt) {
         files: {
           'public/layouts/core.min.js': [
             'public/vendor/jquery/jquery-1.10.2.js',
+            'public/vendor/jquery/jquery-ui-1.10.3.custom.min.js',
             'public/vendor/underscore/underscore.js',
             'public/vendor/backbone/backbone.js',
             'public/vendor/bootstrap/js/affix.js',
@@ -129,7 +130,8 @@ module.exports = function(grunt) {
             'public/less/bootstrap-build.less',
             'public/vendor/font-awesome/less/font-awesome.less',
             'public/layouts/core.less',
-            'public/vendor/reveal/reveal.less'
+            'public/vendor/reveal/reveal.less',
+            'public/vendor/jquery/jquery-ui-1.10.3.custom.min.less'
           ],
           'public/layouts/admin.min.css': ['public/layouts/admin.less']
         }

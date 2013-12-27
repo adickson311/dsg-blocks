@@ -50,19 +50,48 @@ exports.find = function(req, res, next){
 };
 
 exports.read = function(req, res, next){
-  req.app.db.models.Page.findById(req.params.id).exec(function(err, page) {
+  var outcome = {};
+  
+  var getRecord = function(callback) {
+    req.app.db.models.Page.findById(req.params.id).exec(function(err, page) {
+      if (err) {
+        return next(err);
+      }
+      
+      outcome.page = page;
+      return callback(null, 'done');
+    });
+  };
+  
+  var getDeals = function(callback) {
+    req.app.db.models.Deal.find({'page': req.params.id}).exec(function(err, deals) {
+      if (err) {
+        return next(err);
+      }
+      
+      outcome.deals = deals;
+      return callback(null, 'done');
+    });
+  };
+  
+  var asyncFinally = function(err, results) {
     if (err) {
       return next(err);
     }
     
     if (req.xhr) {
-      res.send(page);
+      res.send(outcome.page);
     } else {
-      req.app.db.models.Deal.find({'page.id': req.params.id}).exec(function(err, deals) {
-        res.render('pages/details', { data: { record: JSON.stringify(page), deals: JSON.stringify(deals) } });
+      res.render('pages/details', { 
+        data: { 
+          record: JSON.stringify(outcome.page),
+          deals: JSON.stringify(outcome.deals)
+        }
       });
     }
-  });
+  };
+  
+  require('async').parallel([getDeals, getRecord], asyncFinally);
 };
 
 exports.create = function(req, res, next){
@@ -103,7 +132,7 @@ exports.create = function(req, res, next){
 };
 
 exports.deals = function(req, res, next){
-  req.app.db.models.Deal.find({'page.id': req.params.id}).exec(function(err, results) {
+  req.app.db.models.Deal.find({'page': req.params.id}).exec(function(err, results) {
     if (err) {
       return next(err);
     }
@@ -127,7 +156,7 @@ exports.categories = function(req, res, next){
     var fieldsToSet = {
       categories: req.body.categories
     };
-    console.log("!!: " + req.params.id + " :: " +req.body.categories);
+    
     req.app.db.models.Page.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, page) {
       if (err) {
         return workflow.emit('exception', err);
@@ -149,6 +178,21 @@ exports.categories = function(req, res, next){
   workflow.emit('validate');
 };
 
-exports.preview = function(req, res){
-  res.render('pages/preview', {dealType: req.param.dealType});
+exports.preview = function(req, res, next){
+  req.app.db.models.Page.findById(req.params.id).exec(function(err, page) {
+    if (err) {
+      return next(err);
+    }
+    
+    if (req.xhr) {
+      res.send(page);
+    } else {
+      res.render('pages/preview', { 
+        data: { 
+          dealType: req.query.dealType,
+          record: page
+        }
+      });
+    }
+  });
 };

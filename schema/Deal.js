@@ -3,21 +3,19 @@
 exports = module.exports = function(app, mongoose) {
   var dealSchema = new mongoose.Schema({
     name: { type: String, default: '' },
-    page: { 
-      id:{ type: mongoose.Schema.Types.ObjectId, ref: 'Page' },
-      name:{ type: String, default: '' }
-    },
+    page: { type: mongoose.Schema.Types.ObjectId, ref: 'Page' },
     dealID: { type: String, default: '' },
-    inStoreOnly: { type: Boolean, default: '' },
-    online: { type: Boolean, default: false },
     categories:[{
-      id: { type: String, default: ''},
+      name: { type: String, default: ''},
       order: { type: Number, default: '' },  
     }],
-    startDate: { type: Date, default: new Date() },
-    endDate: { type: Date, default: new Date() },
     headline: { type: String, default: '' },
     disclaimer: { type: String, default: '' },
+    available: { type: Boolean, default: true },
+    inStoreOnly: { type: Boolean, default: false },
+    online: { type: Boolean, default: true },
+    startDate: { type: String, default: '' },
+    endDate: { type: String, default: '' },
     redPrice: { type: String, default: '' },
     lPrice1: { type: String, default: '' },
     lPrice2: { type: String, default: '' },

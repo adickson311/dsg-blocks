@@ -1,7 +1,7 @@
 /* global app:true */
 /* exported app */
 
-var app; //the main declaration
+var app; //the main declaratiom
 
 (function() {
   'use strict';

@@ -18,10 +18,7 @@ exports.create = function(req, res, next){
   workflow.on('addDeal', function() {
     var dealToAdd = {
       name:  req.body.name,
-      page: {
-        id:  req.body.page.id,
-        name:  req.body.page.name
-      },
+      page: req.body.page.id,
       userCreated: {
         id: req.user._id,
         name: req.user.username,
@@ -44,7 +41,7 @@ exports.create = function(req, res, next){
 
 
 exports.read = function(req, res, next){
-  req.app.db.models.Deal.findById(req.params.id).exec(function(err, deal) {
+  req.app.db.models.Deal.findById(req.params.id).populate('page').exec(function(err, deal) {
     if (err) {
       return next(err);
     }
@@ -52,17 +49,7 @@ exports.read = function(req, res, next){
     if (req.xhr) {
       res.send(deal);
     } else {
-      req.app.db.models.Page.findById(deal.page.id).exec(function(err, page) {
-        if (err) {
-          return next(err);
-        }
-        
-        if (req.xhr) {
-          res.send(page);
-        } else {
-          res.render('deals/details', { data: { record: JSON.stringify(deal), page: JSON.stringify(page) } });
-        }
-      });
+      res.render('deals/details', { data: { record: JSON.stringify(deal) } });
     }
   });
 };
@@ -100,13 +87,15 @@ exports.update = function(req, res, next){
   
   workflow.on('patchDeal', function() {
     var fieldsToSet = {
-      isActive: req.body.isActive,
       name: req.body.name,
+      page: req.body.page,
       headline: req.body.headline,
-      page: {
-        name: req.body.page.name,
-        id: req.body.page.id
-      },
+      disclaimer: req.body.disclaimer,
+      available: req.body.available,
+      inStoreOnly: req.body.inStoreOnly,
+      online: req.body.online,
+      startDate: req.body.startDate,
+      endDate: req.body.endDate,
       link: req.body.link.toLowerCase()
     };
     
@@ -119,6 +108,51 @@ exports.update = function(req, res, next){
       return workflow.emit('response');
     });
   });
-	
+  
+  workflow.emit('validate');
+};
+
+exports.categories = function(req, res, next){
+  var workflow = req.app.utility.workflow(req, res);
+  
+  workflow.on('validate', function() {
+    /*if (!req.body.name) {
+      workflow.outcome.errfor.username = 'required';
+    }
+    else if (!/^[a-zA-Z0-9\-\_]+$/.test(req.body.username)) {
+      workflow.outcome.errfor.username = 'only use letters, numbers, \'-\', \'_\'';
+    }
+    
+    if (!req.body.email) {
+      workflow.outcome.errfor.email = 'required';
+    }
+    else if (!/^[a-zA-Z0-9\-\_\.\+]+@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+$/.test(req.body.email)) {
+      workflow.outcome.errfor.email = 'invalid email format';
+    }*/
+    
+    if (workflow.hasErrors()) {
+      return workflow.emit('response');
+    }
+    
+    workflow.emit('patchDeal');
+  });
+  
+  
+  
+  workflow.on('patchDeal', function() {
+    var fieldsToSet = {
+      categories: req.body.categories
+    };
+    
+    req.app.db.models.Deal.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, deal) {
+      if (err) {
+        return workflow.emit('exception', err);
+      }
+      
+      workflow.outcome.record = deal;
+      return workflow.emit('response');
+    });
+  });
+  
   workflow.emit('validate');
 };

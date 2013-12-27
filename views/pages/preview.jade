@@ -8,20 +8,23 @@ block neck
   link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Andika')
 
 block feet
-  script(src='/views/pages/dsgblocks.js')
   script(src='/views/pages/preview.js')
 
 block body
-  h1 Hello
-  div#blockContainer(style='display:block; min-height:100px; max-width:935px; font-size:0px; padding-left:5px; background-image:url(ajax-loader.gif); background-repeat:no-repeat; background-position:center center;')
+  div.page-header
+    nav.breadcrumbs
+      a(href!='/pages/' + data.record.id +'/') << Exit Preview
+    h1= data.record.name + ' Page Preview'
   
-  script(type='text/template', id='data-dealType') !{dealType}
+  div#blockContainer(style='display:block; min-height:100px; max-width:935px; font-size:0px; padding-left:5px; background-image:url(ajax-loader.gif); background-repeat:no-repeat; background-position:center center;')   
+  
+  script(type='text/template', id='data-dealType') !{data.dealType}
   
   script(id='block_template' type='text/x-jquery-tmpl')
     div.blockTemplate(style='display:inline-block; width:296px; height:346px; border:2px solid #dedede; margin:5px; padding:0px; *zoom:1; position:relative; vertical-align:top; cursor:pointer;')
-      img src='sampleblock.jpg' style='display:block; margin:0px 0px 2px 0px;'  />
-      h2 class='headline' style='text-align:center; font:bold 16px/18px Arial, Helvetica, sans-serif; margin:0px; padding:0px; width:294px; height:36px; color:#333;'></h2>
-      p class='disclaimer' style='text-align:center; font:10px Arial, Helvetica, sans-serif; color:#333; margin:2px 0px; padding:0px; width:294px; height:14px; vertical-align:middle;'></p>
+      img(src='/media/sampleblock.jpg' style='display:block; margin:0px 0px 2px 0px;')
+      h2.headline(style='text-align:center; font:bold 16px/18px Arial, Helvetica, sans-serif; margin:0px; padding:0px; width:294px; height:36px; color:#333;')
+      p.disclaimer(style='text-align:center; font:10px Arial, Helvetica, sans-serif; color:#333; margin:2px 0px; padding:0px; width:294px; height:14px; vertical-align:middle;')
     
       div.priceBox(style='display:none; padding:3px 3px 6px 3px; box-shadow:2px 2px 6px 0px rgba(0,0,0,0.25); margin-top:165px; margin-right:2px; background-image:url(http://dsp.imageg.net/graphics/media/dsp/Test/blocks/pricebg80.png); background-repeat:repeat; position:absolute; top:0px; right:0px; *border-right:1px solid #999 inset; *border-bottom:1px solid #999 inset;')
         p.redPrice(style='font:bold 24px/24px Arial; color:#c12026; margin:2px; text-align:right;')
@@ -30,17 +33,17 @@ block body
 
   script(id='iso_link_template' type='text/x-jquery-tmpl')
     a.ISOLink(style='display:block; margin:3px; padding:4px; font:bold 24px/28px Arial; color:#c22127; background-color:#d2d2d2; text-align:center; text-decoration:none; ' href='http://www.dickssportinggoods.com/storeLocator/index.jsp?ab=Misc_BlockPage_FindAStore')
-      FIND A STORE
+      | FIND A STORE
       span(style='font:bold 28px/24px Arial; position:relative; top:-1px;') &raquo;
 
   script(id='shop_link_template' type='text/x-jquery-tmpl')
     a.shopLink(style='display:block; margin:3px; padding:4px; font:bold 24px/28px Arial; color:#c22127; background-color:#d2d2d2; text-align:center; text-decoration:none; ' href='http://www.dickssportinggoods.com/storeLocator/index.jsp?ab=Misc_BlockPage_FindAStore')
-      SHOP NOW
+      | SHOP NOW
       span(style='font:bold 28px/24px Arial; position:relative; top:-1px;') &raquo;
   
   script(id='soldout_link_template' type='text/x-jquery-tmpl')
     a.soldLink(style='display:block; margin:3px; padding:4px; font:bold 24px/28px Arial; color:#c22127; background-color:#d2d2d2; text-align:center; text-decoration:none; ' href='http://www.dickssportinggoods.com/storeLocator/index.jsp?ab=Misc_BlockPage_FindAStore')
-      FIND A STORE
+      | FIND A STORE
       span(style='font:bold 28px/24px Arial; position:relative; top:-1px;') &raquo;
   
   script(id='soldout_image_template' type='text/html')
