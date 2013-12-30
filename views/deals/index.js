@@ -58,11 +58,11 @@ exports.update = function(req, res, next){
   var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
-    if (!req.body.isActive) {
+    /*if (!req.body.isActive) {
       req.body.isActive = 'no';
     }
     
-    /*if (!req.body.name) {
+    if (!req.body.name) {
       workflow.outcome.errfor.username = 'required';
     }
     else if (!/^[a-zA-Z0-9\-\_]+$/.test(req.body.username)) {
@@ -81,15 +81,14 @@ exports.update = function(req, res, next){
     }
     
     workflow.emit('patchDeal');
-  });
-  
-  
+  });  
   
   workflow.on('patchDeal', function() {
     var fieldsToSet = {
       name: req.body.name,
       page: req.body.page,
       headline: req.body.headline,
+      isActive: req.body.isActive,
       disclaimer: req.body.disclaimer,
       available: req.body.available,
       inStoreOnly: req.body.inStoreOnly,

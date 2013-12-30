@@ -10,7 +10,7 @@ exports.find = function(req, res, next){
   req.query.page = req.query.page ? parseInt(req.query.page, null) : 1;
   req.query.sort = req.query.sort ? req.query.sort : '_id';
   
-  var filters = {};
+  var filters = {isActive: true};
   if (req.query.data) {
     filters.data = new RegExp('^.*?'+ req.query.name +'.*$', 'i');
   }
@@ -64,7 +64,7 @@ exports.read = function(req, res, next){
   };
   
   var getDeals = function(callback) {
-    req.app.db.models.Deal.find({'page': req.params.id}).exec(function(err, deals) {
+    req.app.db.models.Deal.find({'page': req.params.id, 'isActive': true}).exec(function(err, deals) {
       if (err) {
         return next(err);
       }
