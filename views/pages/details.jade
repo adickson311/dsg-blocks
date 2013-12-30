@@ -33,6 +33,10 @@ block body
         ul
           li
             a(href!='#' data-reveal-id='categories') Edit Categories
+          -if (user)
+            -if (user.canPlayRoleOf("admin"))
+              li
+                a.page-preview(href!='/pages/<%- id %>/?allDeals=true') Show Deleted Deals
           li
             a.page-preview(href!='/pages/<%- id %>/preview/') Preview
   
