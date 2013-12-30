@@ -48,6 +48,7 @@ exports = module.exports = function(app, passport) {
   app.get('/pages/', require('./views/pages/index').find);
   app.post('/pages/', require('./views/pages/index').create);
   app.get('/pages/:id/', require('./views/pages/index').read);
+  app.put('/pages/:id/', require('./views/pages/index').update);
   app.get('/pages/:id/deals/', require('./views/pages/index').deals);
   app.options('/pages/:id/deals/', require('./views/pages/index').deals);
   app.put('/pages/:id/categories/', require('./views/pages/index').categories);

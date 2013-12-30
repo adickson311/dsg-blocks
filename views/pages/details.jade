@@ -28,11 +28,15 @@ block body
             button.btn.btn-primary.btn-add(type='button') Create Deal
       nav.breadcrumbs
         a(href='/') Back to pages
-      h1 <%- name %>
+      h1 <%- name %> Deals
       nav.actions
         ul
           li
             a(href!='#' data-reveal-id='categories') Edit Categories
+          -if (user)
+            -if (user.canPlayRoleOf("admin"))
+              li
+                a.page-preview(href!='/pages/<%- id %>/?allDeals=true') Show Deleted Deals
           li
             a.page-preview(href!='/pages/<%- id %>/preview/') Preview
   
@@ -44,7 +48,7 @@ block body
           th.col-sm-3 Headline
           th.col-sm-4 Link
           -if (user)
-            th.col-sm-1
+            th.col-sm-2
       tbody#results-rows
   
   script(type='text/template', id='tmpl-results-row')
@@ -55,8 +59,9 @@ block body
     td.nowrap
       div <%- link %>
     -if (user)
-      td
-        input.btn.btn-default.btn-sm.btn-details(type='button', value='Edit')
+      td.text-right
+        input.btn.btn-default.btn-sm.btn-delete(type='button', value='Delete')
+        input.btn.btn-default.btn-sm.btn-details.btn-primary(type='button', value='Edit')
   
   script(type='text/template', id='tmpl-results-empty-row')
     tr

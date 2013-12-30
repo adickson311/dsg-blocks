@@ -142,7 +142,15 @@
     initialize: function() {
       this.collection = app.mainView.deals;
       this.listenTo(this.collection, 'reset', this.render);
+      this.listenTo(this.collection, 'remove', this.render);
       this.render();
+    },
+    removeDeal: function(deal){
+      if (confirm('Are you sure?')) {
+        deal.set("isActive", false);
+        this.collection.sync("update", deal);
+        this.collection.remove(deal);
+      }
     },
     render: function() {
       this.$el.html( this.template() );
@@ -164,10 +172,14 @@
     tagName: 'tr',
     template: _.template( $('#tmpl-results-row').html() ),
     events: {
-      'click .btn-details': 'viewDetails'
+      'click .btn-details': 'viewDetails',
+      'click .btn-delete': 'remove'
     },
     viewDetails: function() {
       location.href = this.model.url();
+    },
+    remove: function(){
+      app.resultsView.removeDeal(this.model);
     },
     render: function() {
       this.$el.html(this.template( this.model.attributes ));

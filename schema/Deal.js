@@ -2,6 +2,7 @@
 
 exports = module.exports = function(app, mongoose) {
   var dealSchema = new mongoose.Schema({
+    isActive: { type: Boolean, default: true },
     name: { type: String, default: '' },
     page: { type: mongoose.Schema.Types.ObjectId, ref: 'Page' },
     dealID: { type: String, default: '' },
