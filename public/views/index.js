@@ -45,8 +45,8 @@
       items: {}
     }
   });
-	
-	app.HeaderView = Backbone.View.extend({
+  
+  app.HeaderView = Backbone.View.extend({
     el: '#header',
     template: _.template( $('#tmpl-header').html() ),
     events: {
@@ -91,15 +91,22 @@
       }
     }
   });
-	
-	
+  
+  
   app.ResultsView = Backbone.View.extend({
     el: '#results-table',
     template: _.template( $('#tmpl-results-table').html() ),
     initialize: function() {
       this.collection = new app.RecordCollection( app.mainView.results.data );
       this.listenTo(this.collection, 'reset', this.render);
+      this.listenTo(this.collection, 'remove', this.render);
       this.render();
+    },
+    removePage: function(page){
+      if (confirm('Are you sure?')) {
+        this.collection.remove(page);
+        this.collection.sync("update", page, {isActive: false});
+      }
     },
     render: function() {
       this.$el.html( this.template() );
@@ -121,10 +128,14 @@
     tagName: 'tr',
     template: _.template( $('#tmpl-results-row').html() ),
     events: {
-      'click .btn-details': 'viewDetails'
+      'click .btn-details': 'viewDetails',
+      'click .btn-delete': 'remove'
     },
     viewDetails: function() {
       location.href = this.model.url();
+    },
+    remove: function(){
+      app.resultsView.removePage(this.model);
     },
     render: function() {
       this.$el.html(this.template( this.model.attributes ));

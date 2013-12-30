@@ -131,13 +131,42 @@ exports.create = function(req, res, next){
   workflow.emit('validate');
 };
 
-exports.deals = function(req, res, next){
-  req.app.db.models.Deal.find({'page': req.params.id}).exec(function(err, results) {
-    if (err) {
-      return next(err);
-    }
-    res.json(results);
+exports.update = function(req, res, next){
+  var workflow = req.app.utility.workflow(req, res);
+  
+  workflow.on('validate', function() {
+    /*if (!req.body.categories) {
+      workflow.outcome.errfor.categories = 'required';
+      return workflow.emit('response');
+    }*/
+    
+    workflow.emit('patchPage');
   });
+  
+  workflow.on('patchPage', function() {
+    var fieldsToSet = {
+      isActive: req.body.isActive
+    };
+    
+    req.app.db.models.Page.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, page) {
+      if (err) {
+        return workflow.emit('exception', err);
+      }
+
+      workflow.emit('response');
+      
+      /*page.populate('name', function(err, page) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+        
+        workflow.outcome.page = page;
+        workflow.emit('response');
+      });*/
+    });
+  });
+  
+  workflow.emit('validate');
 };
 
 exports.categories = function(req, res, next){
@@ -176,6 +205,15 @@ exports.categories = function(req, res, next){
   });
   
   workflow.emit('validate');
+};
+
+exports.deals = function(req, res, next){
+  req.app.db.models.Deal.find({'page': req.params.id}).exec(function(err, results) {
+    if (err) {
+      return next(err);
+    }
+    res.json(results);
+  });
 };
 
 exports.preview = function(req, res, next){

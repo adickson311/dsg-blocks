@@ -6,7 +6,7 @@ exports.init = function(req, res, next){
   req.query.page = req.query.page ? parseInt(req.query.page, null) : 1;
   req.query.sort = req.query.sort ? req.query.sort : '_id';
   
-  var filters = {};
+  var filters = {isActive: true};
   if (req.query.name) {
     filters.name = new RegExp('^.*?'+ req.query.name +'.*$', 'i');
   }
@@ -55,3 +55,40 @@ exports.init = function(req, res, next){
   });*/
 };
 
+exports.deactivate = function(req, res, next){
+	var workflow = req.app.utility.workflow(req, res);
+  
+  workflow.on('validate', function() {
+    if (!req.body.isActive) {
+      workflow.outcome.errfor.categories = 'required';
+      return workflow.emit('response');
+    }
+    
+    workflow.emit('patchPage');
+  });
+  
+  workflow.on('patchPage', function() {
+    var fieldsToSet = {
+      isActive: req.body.isActive
+    };
+    
+    req.app.db.models.Page.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, page) {
+      if (err) {
+        return workflow.emit('exception', err);
+      }
+
+      workflow.emit('response');
+      
+      /*page.populate('name', function(err, page) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+        
+        workflow.outcome.page = page;
+        workflow.emit('response');
+      });*/
+    });
+  });
+  
+  workflow.emit('validate');
+};

@@ -56,17 +56,18 @@ block body
     table.table.table-striped
       thead
         tr
-          th Pages
+          th.stretch Page Name
           -if (user)
-            th.col-sm-1
+            th.col-sm-2
       tbody#results-rows
   
   script(type='text/template', id='tmpl-results-row')
     td.stretch
       a(href!='/pages/<%- _id %>/') <%- name %>
     -if (user)
-      td
-        input.btn.btn-default.btn-sm.btn-details(type='button', value='Edit')
+      td.text-right
+        input.btn.btn-default.btn-sm.btn-delete(type='button', value='Delete')
+        input.btn.btn-primary.btn-sm.btn-details(type='button', value='Edit')
   
   script(type='text/template', id='tmpl-results-empty-row')
     tr
