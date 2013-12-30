@@ -46,9 +46,9 @@ block body
         tr
           th.col-sm-3 Deal Name
           th.col-sm-3 Headline
-          th.col-sm-4 Link
+          th.col-sm-3 Link
           -if (user)
-            th.col-sm-2
+            th.col-sm-3
       tbody#results-rows
   
   script(type='text/template', id='tmpl-results-row')
@@ -61,6 +61,10 @@ block body
     -if (user)
       td.text-right
         input.btn.btn-default.btn-sm.btn-delete(type='button', value='Delete')
+        <% if(!isActive) { %>
+        -if (user.canPlayRoleOf("admin"))
+          input.btn.btn-default.btn-sm.btn-restore(type='button', value='Restore')
+        <% } %>
         input.btn.btn-default.btn-sm.btn-details.btn-primary(type='button', value='Edit')
   
   script(type='text/template', id='tmpl-results-empty-row')

@@ -65,14 +65,14 @@ exports.read = function(req, res, next){
   
   var getDeals = function(callback) {
     var searchFields = {
-			'page': req.params.id
-		};
-		
-		if(!req.query.allDeals) {
-			searchFields.isActive = true;
-		}
-		
-		req.app.db.models.Deal.find(searchFields).exec(function(err, deals) {
+      'page': req.params.id
+    };
+    
+    if(!req.query.allDeals) {
+      searchFields.isActive = true;
+    }
+    
+    req.app.db.models.Deal.find(searchFields).exec(function(err, deals) {
       if (err) {
         return next(err);
       }
