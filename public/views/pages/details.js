@@ -152,6 +152,12 @@
         this.collection.remove(deal);
       }
     },
+    restoreDeal: function(deal){
+      if (confirm('Are you sure?')) {
+        deal.set("isActive", true);
+        this.collection.sync("update", deal);
+      }
+    },
     render: function() {
       this.$el.html( this.template() );
       
@@ -173,13 +179,17 @@
     template: _.template( $('#tmpl-results-row').html() ),
     events: {
       'click .btn-details': 'viewDetails',
-      'click .btn-delete': 'remove'
+      'click .btn-delete': 'remove',
+      'click .btn-restore': 'restore'
     },
     viewDetails: function() {
       location.href = this.model.url();
     },
     remove: function(){
       app.resultsView.removeDeal(this.model);
+    },
+    restore: function(){
+      app.resultsView.restoreDeal(this.model);
     },
     render: function() {
       this.$el.html(this.template( this.model.attributes ));

@@ -171,7 +171,7 @@
         page: app.mainView.model.get('page')._id,
         name: this.$el.find('[name="name"]').val(),
         dealID: this.$el.find('[name="dealID"]').val(),
-        isActive: this.model.isActive,
+        isActive: this.model.get("isActive"),
         available: booleans[0],
         inStoreOnly: booleans[1],
         online: booleans[2],
