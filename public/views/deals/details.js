@@ -282,6 +282,6 @@
   });
   
   $(document).ready(function() {
-    app.mainView = new app.MainView();
+    app.mainView = new app.MainView(); //test
   });
 }());

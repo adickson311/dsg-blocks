@@ -59,7 +59,7 @@ module.exports = function(grunt) {
         files: {
           'public/layouts/core.min.js': [
             'public/vendor/jquery/jquery-1.10.2.js',
-            'public/vendor/jquery/jquery-ui-1.10.3.custom.min.js',
+            'public/vendor/jquery/jquery-ui-1.10.3.custom.js',
             'public/vendor/underscore/underscore.js',
             'public/vendor/backbone/backbone.js',
             'public/vendor/bootstrap/js/affix.js',
